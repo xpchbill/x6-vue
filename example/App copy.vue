@@ -1,66 +1,46 @@
 <template>
   <div class="container">
     <div ref="stencil" class="stencil"/>
-    <Graph 
-      @ready="ready" 
-      :connecting="{
-        snap: true, 
-        allowBlank: false,
-        allowLoop: false,
-        highlight: true,
-        connector: 'rounded',
-        connectionPoint: 'boundary',
-        router: { 
-          name: 'er',
-          args: {
-            offset: 16,
-            direction: 'H'
-          }
-        }
-      }"
-    >
-      <VueShape primer="rect" id="1" :x="100" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
-        <div @click="handleCustomNodeClick(scope, $event)">这里是一个vue的组件</div>
+    <Graph @ready="ready">
+      <Node id="1" x="100" y="100" @added="added" label="node1">
+        <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <Port id="id1" />
+          <Port id="id2" :magnet="false" />
+          <x6-port id="id3" />
+        </PortGroup>
+      </Node>
+      <Node id="9" x="500" y="200" label="node9" :width="300" :height="200">
+        <Node id="99" :x="550" :y="220" label="node99" :width="200" :height="150">
+          <Node id="999" :x="580" :y="240" label="node999"></Node>
+        </Node>
+      </Node>
+      <Node id="2" :x="200" :y="200" label="node2">
+        <Port id="id1" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}" />
+      </Node>
+      <x6-node id="44" :x="400" :y="300" label="node4">
+        <x6-port-group name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <x6-port id="id1" />
+        </x6-port-group>
+      </x6-node>
+      <Edge id="e1" source="1" target="2" @added="added" label="edge1" />
+      <VueShape primer="rect" id="3" :x="200" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
+        <div>这里是一个vue的组件</div>
         <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
         <template #port>
-        <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id1" :magnet="true" />
-        </PortGroup>
-        <PortGroup name="out" position="right" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id2" :magnet="true" />
+        <PortGroup name="in" position="top" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
+          <Port id="id1" />
+          <Port id="id2" :magnet="false" />
         </PortGroup>
         </template>
       </VueShape>
-      <VueShape primer="rect" id="2" :x="500" :y="100" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
-        <div @click="handleCustomNodeClick(scope, $event)">这里是一个vue的组件</div>
-        <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
-        <template #port>
-        <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id3" :magnet="true" />
-        </PortGroup>
-        <PortGroup name="out" position="right" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id4" :magnet="true" />
-        </PortGroup>
-        </template>
-      </VueShape>
-      <VueShape primer="rect" id="3" :x="500" :y="500" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
-        <div @click="handleCustomNodeClick(scope, $event)">这里是一个vue的组件</div>
-        <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
-        <template #port>
-        <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id5" :magnet="true" />
-        </PortGroup>
-        <PortGroup name="out" position="right" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id6" :magnet="true" />
-        </PortGroup>
-        </template>
-      </VueShape>
-      <Edge id="e1" :source="{cell: '1', port: 'id2'}" :target="{cell: '2', port: 'id3'}" @added="added" label="edge1" />
-      <Edge id="e2" :source="{cell: '1', port: 'id2'}" :target="{cell: '3', port: 'id5'}" @added="added" label="edge2" />
+      <CustomNode v-if="visible" primer="circle" id="4" :x="400" :width="100" :height="100" :y="y" :attrs="{circle: {fill: '#ddd', stroke: '#333'}, label: {text: 'CustomNode'}}" @added="added" @click="click" @cell:change:position="changed" :magnet="true" >
+        <span style="text-align: center;display: inline-block;width: 100%;margin-top: 20px;">Hello {{name}}</span>
+      </CustomNode>
+      <Edge id="e2" source="1" target="3" @added="added" />
       <!-- <Scroller /> -->
       <Background />
       <Grid :visible="showGrid" />
-      <!-- <Selection @selected="selected" @unselected="unselected" @changed="changed" /> -->
+      <Selection @selected="selected" @unselected="unselected" @changed="changed" />
       <Snapline />
       <Clipboard @copy="copy" @paste="paste" />
       <Keyboard />
@@ -93,6 +73,7 @@
           </Menu>
         </template>
       </ContextMenu>
+      <Connecting :validateEdge="validateEdge" />
       <TeleportContainer />
     </Graph>
   </div>
@@ -102,7 +83,6 @@
 // @ts-nocheck
 import { defineComponent, ref, h } from 'vue'
 import { Options, Vue } from 'vue-class-component';
-import { Vector } from '@antv/x6';
 import { Port, PortGroup, TeleportContainer } from '../src/index'
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
 import { Grid, Background, Clipboard, Snapline, Selection, Keyboard, Scroller, MouseWheel, MiniMap } from '../src/index'
@@ -129,7 +109,6 @@ const CustomNode = defineComponent({
 @Options({
   components: {
     Graph,
-    Vector,
     Node,
     Edge,
     Grid,
@@ -209,10 +188,6 @@ export default class App extends Vue {
     // 这里将数据存到当前对象，永远返回false，拖拽的节点不放入画布，使用一个新的节点替换位置
     return Promise.resolve(false)
   }
-  handleCustomNodeClick(data, e) {
-    console.log('hendleContextMenuClick', data, e)
-    // data.onClose()
-  }
   hendleContextMenuClick(data, e) {
     console.log('hendleContextMenuClick', data, e)
     // data.onClose()
@@ -223,38 +198,6 @@ export default class App extends Vue {
   }
   ready({ graph }){
     // setGraph(graph)
-    graph.on('signal', (cell) => {
-      if (cell.isEdge()) {
-        const view = graph.findViewByCell(cell)
-        if (view) {
-          const token = Vector.create('circle', { r: 6, fill: '#feb662' })
-          const target = cell.getTargetCell()
-          setTimeout(() => {
-            view.sendToken(token.node, 1000, () => {
-              if (target) {
-                graph.trigger('signal', target)
-              }
-            })
-          }, 300)
-        }
-      } else {
-        const edges = graph.model.getConnectedEdges(cell, {
-          outgoing: true,
-        });
-        edges.forEach((edge) => graph.trigger('signal', edge));
-      }
-    });
-
-    const trigger = () => {
-      const nodes = graph.getNodes() || [];
-      const firstNode = nodes.find(n => n.id === '1');
-      if (firstNode) {
-        graph.trigger('signal', nodes.find(n => n.id === '1'))
-      }
-      setTimeout(trigger, 2000)
-    }
-
-    trigger();
   }
 }
 </script>
