@@ -19,9 +19,12 @@
         }
       }"
     >
-      <VueShape primer="rect" id="1" :x="100" :y="300" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
-        <div @click="handleCustomNodeClick(scope, $event)">这里是一个vue的组件</div>
-        <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
+      <VueShape primer="rect" id="1" :x="100" :y="300" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
+        <div class="x6-node-header">
+          <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+          <span class="x6-node-header__label">查询主机线程</span>
+          <reload-outlined class="x6-node-header__reload-icon" @click="handleCustomNodeClick(scope, $event)" />
+        </div>
         <template #port>
         <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" :magnet="true" />
@@ -31,9 +34,12 @@
         </PortGroup>
         </template>
       </VueShape>
-      <VueShape primer="rect" id="2" :x="500" :y="100" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
-        <div @click="handleCustomNodeClick(scope, $event)">这里是一个vue的组件</div>
-        <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
+      <VueShape primer="rect" id="2" :x="500" :y="100" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
+        <div class="x6-node-header">
+          <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+          <span class="x6-node-header__label">主机版本查询</span>
+          <reload-outlined :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
+        </div>
         <template #port>
         <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id3" :magnet="true" />
@@ -43,9 +49,12 @@
         </PortGroup>
         </template>
       </VueShape>
-      <VueShape primer="rect" id="3" :x="500" :y="500" :width="160" :attrs="{rect: {fill: '#ddd', stroke: '#333'}, label: {text: 'VueShape'}}" @added="added" @cell:change:zIndex="changed">
-        <div @click="handleCustomNodeClick(scope, $event)">这里是一个vue的组件</div>
-        <img style="width: 30px;height:30px;" src="https://v3.cn.vuejs.org/logo.png" />
+      <VueShape primer="rect" id="3" :x="500" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
+        <div class="x6-node-header">
+          <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
+          <span class="x6-node-header__label">主机参数查询</span>
+          <reload-outlined :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
+        </div>
         <template #port>
         <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id5" :magnet="true" />
@@ -55,8 +64,8 @@
         </PortGroup>
         </template>
       </VueShape>
-      <Edge id="e1" :source="{cell: '1', port: 'id2'}" :target="{cell: '2', port: 'id3'}" @added="added" label="edge1" />
-      <Edge id="e2" :source="{cell: '1', port: 'id2'}" :target="{cell: '3', port: 'id5'}" @added="added" label="edge2" />
+      <Edge id="e1" :source="{cell: '1', port: 'id2'}" :target="{cell: '2', port: 'id3'}" @added="added" label="edge1" :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" />
+      <Edge id="e2" :source="{cell: '1', port: 'id2'}" :target="{cell: '3', port: 'id5'}" @added="added" label="edge2" :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" />
       <!-- <Scroller /> -->
       <Background />
       <Grid :visible="showGrid" />
@@ -101,7 +110,12 @@
 <script lang="ts">
 // @ts-nocheck
 import { defineComponent, ref, h } from 'vue'
-import { Options, Vue } from 'vue-class-component';
+import {
+  ReloadOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
+} from '@ant-design/icons-vue'
+import { Options, Vue } from 'vue-class-component'
 import { Vector } from '@antv/x6';
 import { Port, PortGroup, TeleportContainer } from '../src/index'
 import Graph, { Node, Edge, VueShape, useVueShape, VueShapeProps, GraphContext, useCellEvent } from '../src/index'
@@ -149,6 +163,9 @@ const CustomNode = defineComponent({
     ContextMenu, Menu, MenuItem,
     Port, PortGroup,
     TeleportContainer,
+    CheckCircleFilled,
+    ReloadOutlined,
+    CloseCircleFilled,
   },
 })
 export default class App extends Vue {
@@ -214,6 +231,8 @@ export default class App extends Vue {
     // data.onClose()
   }
   hendleContextMenuClick(data, e) {
+    e.preventDefault()
+    e.stopPropagation()
     console.log('hendleContextMenuClick', data, e)
     // data.onClose()
   }
@@ -229,13 +248,14 @@ export default class App extends Vue {
         if (view) {
           const token = Vector.create('circle', { r: 6, fill: '#feb662' })
           const target = cell.getTargetCell()
-          setTimeout(() => {
-            view.sendToken(token.node, 1000, () => {
-              if (target) {
-                graph.trigger('signal', target)
-              }
-            })
-          }, 300)
+          view.sendToken(token.node, 1000);
+          // setTimeout(() => {
+          //   view.sendToken(token.node, 1000, () => {
+          //     if (target) {
+          //       graph.trigger('signal', target)
+          //     }
+          //   })
+          // }, 300)
         }
       } else {
         const edges = graph.model.getConnectedEdges(cell, {
@@ -249,12 +269,40 @@ export default class App extends Vue {
       const nodes = graph.getNodes() || [];
       const firstNode = nodes.find(n => n.id === '1');
       if (firstNode) {
+        const view = graph.findView(firstNode)
+        if (view) {
+          view.animate('polygon', {
+            attributeType: 'XML',
+            attributeName: 'fill',
+            values: '#5F95FF;#EFF4FF',
+            dur: '1s',
+            repeatCount: 'indefinite',
+          })
+        }
         graph.trigger('signal', nodes.find(n => n.id === '1'))
       }
       setTimeout(trigger, 2000)
     }
 
     trigger();
+
+    graph.on('node:mouseenter', ({ node }) => {
+      node.addTools({
+        name: 'boundary',
+        args: {
+          attrs: {
+            fill: '#7c68fc',
+            stroke: '#9254de',
+            strokeWidth: 1,
+            fillOpacity: 0.2,
+          },
+        },
+      })
+    })
+
+    graph.on('node:mouseleave', ({ node }) => {
+      node.removeTools()
+    })
   }
 }
 </script>
@@ -270,6 +318,30 @@ export default class App extends Vue {
   }
   #graph-contaner{
     flex: 1;
+  }
+  .x6-node-header {
+    display: flex;
+    height: 40px;
+    color: #fff;
+    background: #2C3044;
+    border-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 0 16px;
+    align-items: center;
+
+    &__label {
+      flex-grow: 1;
+    }
+    &__reload-icon {
+      color: #ffffff; 
+      font-size: 18px;
+      margin-left: 6px;
+      transition: transform .7s ease-in-out;
+    }
+    &__reload-icon:hover {
+        transform: rotate(360deg);
+    }
   }
 }
 </style>

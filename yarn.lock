@@ -43,7 +43,7 @@
   resolved "https://registry.yarnpkg.com/@antv/graphin-icons/-/graphin-icons-1.0.0.tgz#86ba9e9ab6565bfe2ea1096e8678e76c279053f1"
   integrity sha512-2nogK6ZrDklnfIOJrqOAgD7iFLjfZIjLbA8pDUbeXN5c9b0Mu84oCfyqg8OmWwvi9Gt80eUzoplo73gKjZECJg==
 
-"@antv/x6-vue-shape@^1.4.0":
+"@antv/x6-vue-shape@^1.3.2":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@antv/x6-vue-shape/-/x6-vue-shape-1.4.0.tgz#fb841fcc50c68fd1b47cd76089dedc9e9c6acc91"
   integrity sha512-ohWyDB3xt6CQQUGolTbK1Vxklr0VYsAg87iadj3rdoPfuNljoRvlzTlDFXxVHzyVdwNOXqx0Yd/EQVdubP8e8g==
@@ -2157,10 +2157,10 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-ant-design-vue@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/ant-design-vue/-/ant-design-vue-3.2.1.tgz#026afa0d41504ff843904b6646447523a04e4434"
-  integrity sha512-zqtfKF4pnHf4AJc8nY81/ZkfpPMtI/uJAwrMOt8coA96tOoSKy2fqWPI/Sklbgfx4IS/PuRtpb8Cqgw/KxD9iA==
+ant-design-vue@^3.2.9:
+  version "3.2.9"
+  resolved "https://registry.yarnpkg.com/ant-design-vue/-/ant-design-vue-3.2.9.tgz#0ec3d02912a3f8596680d7f7a71749e8f01288cb"
+  integrity sha512-fnZJpAf4tYAPGBALD9dv8VBmeqfJ+xPt87DfgY1/JI6x3hn6Gfge7voF1GkS0yVT0zLyzc2aTWkDVFWKB5iupA==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons-vue" "^6.1.0"
