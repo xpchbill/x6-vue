@@ -20,19 +20,11 @@
       }"
     >
       <VueShape primer="rect" id="1" :x="100" :y="300" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
-        <a-popover title="Title" placement="top" arrow-point-at-center>
-          <template #content>
-            <p>Content</p>
-            <p>Content</p>
-          </template>
-          <div class="x6-node-header">
-            <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
-            <span class="x6-node-header__label">
-                xxxxxxxx01
-            </span>
-            <reload-outlined class="x6-node-header__reload-icon" @click="handleCustomNodeClick(scope, $event)" />
-          </div>
-        </a-popover>
+        <div class="x6-node-header">
+          <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+          <span class="x6-node-header__label">查询主机线程</span>
+          <reload-outlined class="x6-node-header__reload-icon" @click="handleCustomNodeClick(scope, $event)" />
+        </div>
         <template #port>
         <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
           <Port id="id1" :magnet="true" />
@@ -45,15 +37,7 @@
       <VueShape primer="rect" id="2" :x="500" :y="100" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
         <div class="x6-node-header">
           <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
-          <span class="x6-node-header__label">
-            <a-popover title="Title" placement="topLeft">
-              <template #content>
-                <p>Content</p>
-                <p>Content</p>
-              </template>
-              xxxxxxxx02
-            </a-popover>
-          </span>
+          <span class="x6-node-header__label">主机版本查询</span>
           <reload-outlined :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
         </div>
         <template #port>
@@ -68,7 +52,7 @@
       <VueShape primer="rect" id="3" :x="500" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
         <div class="x6-node-header">
           <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
-          <span class="x6-node-header__label">xxxxxxxx03</span>
+          <span class="x6-node-header__label">主机参数查询</span>
           <reload-outlined :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
         </div>
         <template #port>
@@ -80,23 +64,7 @@
         </PortGroup>
         </template>
       </VueShape>
-      <Edge 
-        id="e1" 
-        :source="{cell: '1', port: 'id2'}" 
-        :target="{cell: '2', port: 'id3'}" 
-        @added="added" 
-        label="edge1" 
-        :attrs="{
-          line: {
-            stroke: '#1890ff',
-            strokeDasharray: 8,
-            targetMarker: 'classic',
-            style: {
-              animation: 'ant-line 30s infinite linear',
-            },
-          }
-        }" 
-      />
+      <Edge id="e1" :source="{cell: '1', port: 'id2'}" :target="{cell: '2', port: 'id3'}" @added="added" label="edge1" :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" />
       <Edge id="e2" :source="{cell: '1', port: 'id2'}" :target="{cell: '3', port: 'id5'}" @added="added" label="edge2" :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" />
       <!-- <Scroller /> -->
       <Background />
@@ -126,14 +94,14 @@
           </Menu>
         </template>
       </ContextMenu>
-      <!-- <ContextMenu bindType="edge" bindEvent="click">
+      <ContextMenu bindType="edge" bindEvent="click">
         <template #default="scope">
           <Menu @click="hendleContextMenuClick(scope, $event)">
             <MenuItem key="1">edge Item 1</MenuItem>
             <MenuItem key="2">edge Item 2</MenuItem>
           </Menu>
         </template>
-      </ContextMenu> -->
+      </ContextMenu>
       <TeleportContainer />
     </Graph>
   </div>
@@ -220,9 +188,6 @@ export default class App extends Vue {
       this.name = 'x6'
     }, 5000)
   }
-  getPopupContainer(trigger: HTMLElement) {
-    return trigger.parentElement
-  }
   copy(e) {
     console.log('copy', e)
   }
@@ -305,15 +270,15 @@ export default class App extends Vue {
       const firstNode = nodes.find(n => n.id === '1');
       if (firstNode) {
         const view = graph.findView(firstNode)
-        // if (view) {
-        //   view.animate('polygon', {
-        //     attributeType: 'XML',
-        //     attributeName: 'fill',
-        //     values: '#5F95FF;#EFF4FF',
-        //     dur: '1s',
-        //     repeatCount: 'indefinite',
-        //   })
-        // }
+        if (view) {
+          view.animate('polygon', {
+            attributeType: 'XML',
+            attributeName: 'fill',
+            values: '#5F95FF;#EFF4FF',
+            dur: '1s',
+            repeatCount: 'indefinite',
+          })
+        }
         graph.trigger('signal', nodes.find(n => n.id === '1'))
       }
       setTimeout(trigger, 2000)
@@ -321,23 +286,23 @@ export default class App extends Vue {
 
     trigger();
 
-    // graph.on('node:mouseenter', ({ node }) => {
-    //   node.addTools({
-    //     name: 'boundary',
-    //     args: {
-    //       attrs: {
-    //         fill: '#7c68fc',
-    //         stroke: '#9254de',
-    //         strokeWidth: 1,
-    //         fillOpacity: 0.2,
-    //       },
-    //     },
-    //   })
-    // })
+    graph.on('node:mouseenter', ({ node }) => {
+      node.addTools({
+        name: 'boundary',
+        args: {
+          attrs: {
+            fill: '#7c68fc',
+            stroke: '#9254de',
+            strokeWidth: 1,
+            fillOpacity: 0.2,
+          },
+        },
+      })
+    })
 
-    // graph.on('node:mouseleave', ({ node }) => {
-    //   node.removeTools()
-    // })
+    graph.on('node:mouseleave', ({ node }) => {
+      node.removeTools()
+    })
   }
 }
 </script>
@@ -366,10 +331,7 @@ export default class App extends Vue {
     align-items: center;
 
     &__label {
-      height: 100%;
-      display: flex;
       flex-grow: 1;
-      align-items: center;
     }
     &__reload-icon {
       color: #ffffff; 
@@ -380,11 +342,6 @@ export default class App extends Vue {
     &__reload-icon:hover {
         transform: rotate(360deg);
     }
-  }
-}
-@keyframes ant-line {
-  to {
-      stroke-dashoffset: -1000
   }
 }
 </style>
