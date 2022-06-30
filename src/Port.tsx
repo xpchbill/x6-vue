@@ -24,7 +24,7 @@ export const PortGroup = defineComponent({
 
 export const Port = defineComponent({
   name: 'Port',
-  props: ['id', 'magnet', 'group', 'args', 'markup', 'attrs', 'zIndex', 'label'],
+  props: ['id', 'size','magnet', 'group', 'args', 'markup', 'attrs', 'zIndex', 'label'],
   inject: [cellContextSymbol, portGroupContextSymbol],
   setup(props) {
     const { cell } = inject(cellContextSymbol) || {}
@@ -36,8 +36,17 @@ export const Port = defineComponent({
         cell.setPortProp(props.id, `attrs/${selector}/magnet`, !!magnet)
       }
     }
+    const setSize = (size) => {
+      const { selector } = cell.getPortMarkup()
+      // if (magnet === false || magnet === true) {
+      cell.setPortProp(props.id, `attrs/${selector}/r`, size)
+      // }
+    }
     // 监听magnet变化，动态设置magnet
     watch(() => props.magnet, setMagnet)
+    watch(() => {
+      return props.size
+    }, setSize)
     onMounted(() => {
       const { id, magnet, group, ...options } = props
       // Port单独使用的时候，groupcontext为空

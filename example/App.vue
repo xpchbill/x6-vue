@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <div ref="stencil" class="stencil"/>
+    <div ref="stencil" class="stencil">
+      <a-switch v-model:checked="isEditMode" checked-children="Edit" un-checked-children="Preview"  />
+    </div>
     <Graph 
       @ready="ready" 
       :resizing="false"
@@ -20,17 +22,136 @@
         }
       }"
     >
-      <VueShape primer="rect" id="1" :x="100" :y="300" :width="220" @added="added" @cell:change:zIndex="changed">
+      <VueShape primer="rect" id="1" :x="100" :y="300" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
+        <div class="x6-node-container">
+          <div class="x6-node-header">
+            <div class="x6-node-header__status">
+              <a-tooltip color="#ffffff">
+                <template #title>
+                  <span class="x6-node-header__tooltip-text">Sucess</span>
+                </template>
+                <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+              </a-tooltip>
+            </div>
+            <span class="x6-node-header__label">
+              <a-tooltip>
+                <template #title>xxxxxxxx01</template>
+                xxxxxxxx01
+              </a-tooltip>
+            </span>
+            <a-tooltip>
+              <template #title>Delete node</template>
+              <a-button 
+                type="ghost" 
+                shape="circle"
+                size="small"
+                :style="{color: '#fff'}" 
+                @click="handleCustomNodeClick(scope, $event)"
+              >
+                <template v-if="isEditMode" #icon><delete-filled /></template>
+              </a-button>
+            </a-tooltip>
+          </div>
+          <div class="x6-node-body">
+          </div>
+        </div>
+        <template #port>
+          <PortGroup 
+            name="in" 
+            position="left"
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id1" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
+          <PortGroup 
+            name="out" 
+            position="right" 
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          > 
+            <Port 
+              id="id2" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
+        </template>
+      </VueShape>
+      <VueShape primer="rect" id="2" :x="500" :y="100" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
+        <div class="x6-node-header">
+          <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
+          <span class="x6-node-header__label">
+            <a-popover title="Title" placement="topLeft">
+              <template #content>
+                <p>Content</p>
+                <p>Content</p>
+              </template>
+              xxxxxxxx02
+            </a-popover>
+          </span>
+          <plus-square-filled :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
+        </div>
+        <template #port>
+          <PortGroup 
+            name="in" 
+            position="left"
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id3" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
+          <PortGroup 
+            name="out" 
+            position="right" 
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id4" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
+        </template>
+      </VueShape>
+      <VueShape primer="rect" id="3" :x="500" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
         <a-popover title="Title" placement="top" arrow-point-at-center>
           <template #content>
             <p>Content</p>
             <p>Content</p>
           </template>
-          <div class="x6-node-container heartbeat">
+          <div :class="isEditMode ? 'x6-node-container' : 'x6-node-container heartbeat'">
             <div class="x6-node-header">
               <div class="x6-node-header__status">
-                <!-- <div class="dot"></div>
-                <div class="pulse"></div> -->
                 <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
               </div>
               <span class="x6-node-header__label">
@@ -43,76 +164,100 @@
           </div>
         </a-popover>
         <template #port>
-        <!-- <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id1" :magnet="true" />
-        </PortGroup>
-        <PortGroup name="out" position="right" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id2" :magnet="true" />
-        </PortGroup> -->
+          <PortGroup 
+            name="in" 
+            position="left"
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id5" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
+          <PortGroup 
+            name="out" 
+            position="right" 
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id6" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
         </template>
       </VueShape>
-      <VueShape primer="rect" id="2" :x="500" :y="100" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
+      <VueShape primer="rect" id="4" :x="900" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
         <div class="x6-node-header">
-          <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+          <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
           <span class="x6-node-header__label">
             <a-popover title="Title" placement="topLeft">
               <template #content>
                 <p>Content</p>
                 <p>Content</p>
               </template>
-              xxxxxxxx02
+              xxxxxxxx04
             </a-popover>
           </span>
           <plus-square-filled :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
         </div>
-        <!-- <template #port>
-        <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id3" :magnet="true" />
-        </PortGroup>
-        <PortGroup name="out" position="right" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id4" :magnet="true" />
-        </PortGroup>
-        </template> -->
-      </VueShape>
-      <VueShape primer="rect" id="3" :x="500" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#dddddd', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
-        <div class="x6-node-header">
-          <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
-          <span class="x6-node-header__label">xxxxxxxx03</span>
-          <reload-outlined class="x6-node-header__reload-icon" :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
-        </div>
         <template #port>
-        <!-- <PortGroup name="in" position="left" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id5" :magnet="true" />
-        </PortGroup>
-        <PortGroup name="out" position="right" :attrs="{circle: {r: 6, magnet: true, stroke: '#31d0c6'}}">
-          <Port id="id6" :magnet="true" />
-        </PortGroup> -->
+          <PortGroup 
+            name="in" 
+            position="left"
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id7" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
+          <PortGroup 
+            name="out" 
+            position="right" 
+            :attrs="{
+              circle: {
+                r: 5, 
+                magnet: true, 
+                stroke: '#31d0c6'
+              }
+            }"
+          >
+            <Port 
+              id="id8" 
+              :size="isEditMode ? 5 : 0" 
+              :magnet="true" 
+            />
+          </PortGroup>
         </template>
       </VueShape>
-      <!-- <Edge 
-        id="e2" 
-        :source="{cell: '1'}" 
-        :target="{cell: '3'}" 
-        @added="added" 
-        label="edge2" 
-        :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" 
-      /> -->
       <Edge 
         id="e1" 
         :source="{cell: '1', port: 'id2'}" 
         :target="{cell: '2', port: 'id3'}" 
         @added="added" 
         label="edge1" 
-        :attrs="{
-          line: {
-            stroke: '#1890ff',
-            strokeDasharray: 8,
-            targetMarker: 'classic',
-            style: {
-              animation: 'ant-line 30s infinite linear',
-            },
-          }
-        }" 
+        :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" 
       />
       <Edge 
         id="e2" 
@@ -122,32 +267,40 @@
         label="edge2" 
         :attrs="{line: {stroke: '#777777', strokeWidth: 1}}" 
       />
+      <Edge 
+        id="e3" 
+        :source="{cell: '3', port: 'id6'}" 
+        :target="{cell: '4', port: 'id7'}" 
+        @added="added" 
+        label="edge2" 
+        :attrs="{
+          line: !isEditMode ? {
+            stroke: '#1890ff',
+            strokeWidth: 2,
+            strokeDasharray: 8,
+            targetMarker: 'classic',
+            style: {
+              animation: 'ant-line 30s infinite linear',
+            },
+          } : 
+          {
+            stroke: '#777777', 
+            strokeWidth: 1,
+            strokeDasharray: 0,
+          }
+        }" 
+      />
       <!-- <Scroller /> -->
       <Background />
       <Grid :visible="showGrid" />
-      <!-- <Selection @selected="selected" @unselected="unselected" @changed="changed" /> -->
       <Snapline />
       <Clipboard @copy="copy" @paste="paste" />
       <Keyboard />
       <MouseWheel />
       <MiniMap />
-      <Stencil :container="stencil" :layoutOptions="{columns: 1, columnWidth: 200, rowHeight: 60}" :stencilGraphWidth="200" :validateNode="validateNode" :groups="[{name: 'group1', graphHeight: 160}, {name: 'group2', graphHeight: 160}]">
-        <StencilGroup name="group1" :graphHeight="160" :graphWidth="200">
-          <Node id="1" @added="added" label="group node1" :width="160" />
-          <Node id="2" label="group node2" :width="160" />
-        </StencilGroup>
-        <StencilGroup name="group2" :graphHeight="200" :graphWidth="200">
-          <Node id="3" label="group2 node3" :width="160" />
-          <Node id="4" label="group2 node4" :width="160" />
-        </StencilGroup>
-      </Stencil>
       <Node v-for="node in addedNodes" :key="node.id" v-bind="node" />
-      <ContextMenu>
+      <ContextMenu bindType="node">
         <template #default="scope">
-          <!-- <Menu @click="hendleContextMenuClick(scope, $event)">
-            <MenuItem key="1">Item 1</MenuItem>
-            <MenuItem key="2">Item 2</MenuItem>
-          </Menu> -->
           <a-menu
             style="width: 180px"
             mode="vertical"
@@ -157,7 +310,7 @@
               <template #icon>
                 <PlusSquareFilled />
               </template>
-              Add a child node
+              View node
             </a-menu-item>
             <a-menu-item key="2">
               <template #icon>
@@ -168,14 +321,6 @@
           </a-menu>
         </template>
       </ContextMenu>
-      <!-- <ContextMenu bindType="edge" bindEvent="click">
-        <template #default="scope">
-          <Menu @click="hendleContextMenuClick(scope, $event)">
-            <MenuItem key="1">edge Item 1</MenuItem>
-            <MenuItem key="2">edge Item 2</MenuItem>
-          </Menu>
-        </template>
-      </ContextMenu> -->
       <TeleportContainer />
     </Graph>
   </div>
@@ -189,6 +334,7 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   PlusSquareFilled,
+  DeleteFilled,
 } from '@ant-design/icons-vue'
 import { Options, Vue } from 'vue-class-component'
 import { Vector } from '@antv/x6';
@@ -245,10 +391,11 @@ const CustomNode = defineComponent({
     ReloadOutlined,
     CloseCircleFilled,
     PlusSquareFilled,
+    DeleteFilled,
   },
 })
 export default class App extends Vue {
-
+  isEditMode = true
   showGrid = true
   showScroller = true
   visible = true
@@ -327,7 +474,7 @@ export default class App extends Vue {
     graph.on('signal', (cell) => {
       if (cell.isEdge()) {
         const view = graph.findViewByCell(cell)
-        if (view) {
+        if (view && !this.isEditMode && (cell.id === 'e2' || cell.id === 'e3')) {
           const token = Vector.create('circle', { r: 6, fill: '#feb662' })
           const target = cell.getTargetCell()
           view.sendToken(token.node, 1000);
@@ -349,7 +496,7 @@ export default class App extends Vue {
 
     const trigger = () => {
       const nodes = graph.getNodes() || [];
-      const firstNode = nodes.find(n => n.id === '1');
+      const firstNode = nodes.find(n => n.id === '3');
       if (firstNode) {
         const view = graph.findView(firstNode)
         // if (view) {
@@ -361,7 +508,7 @@ export default class App extends Vue {
         //     repeatCount: 'indefinite',
         //   })
         // }
-        graph.trigger('signal', nodes.find(n => n.id === '1'))
+        graph.trigger('signal', nodes.find(n => n.id === '3'))
       }
       setTimeout(trigger, 2000)
     }
@@ -392,34 +539,28 @@ export default class App extends Vue {
 <style lang="less">
 .container{
   display: flex;
-  height: 99vh;
+  flex-direction: column;
+  height: 100vh;
+  
   .stencil{
-    width: 280px;
-    height: 100%;
+    width: 100%;
+    height: 64px;
     position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px #ddd;
+    z-index: 10;
   }
   #graph-contaner{
     flex: 1;
   }
   .x6-node-container {
     position: relative;
-    border: 3px solid #6a5cd4;
-    border-radius: 8px;
-    // border: 1px solid #dddddd;
-    box-shadow: 0 0 0 5px rgb(135 59 244 / 20%);
-
-    // animation: warn 0.3s ease-out;
-    // animation-iteration-count: infinite;
-    // animation-name: pulse;
-    // animation-duration: 1000ms;
-    // animation-timing-function: ease-in-out;
-    // animation-iteration-count: infinite;
-    // animation-play-state: running;
   }
   .x6-node-body {
     padding: 10px;
     background: #ffffff;
-    border-radius: 5px;
   }
   .x6-node-header {
     display: flex;
@@ -463,38 +604,27 @@ export default class App extends Vue {
     }
   }
 }
-.dot {
-	position: absolute;
-  width: 18px;
-  height: 18px;
-  left: 0;
-  top: 0;
-  background: #FFF4DC;
-  border-radius: 100%;
-  z-index: 2;
-  animation: warn 1s ease-out;
-  animation-iteration-count: infinite;
+.x6-node-header__tooltip-text {
+  color: #333;
 }
-.pulse {
-	position: absolute;
-  width: 22px;
-  height: 22px;
-  left: -2px;
-  top: -2px;
-  // background: #fff;
-  // border-radius: 100%;
-  // animation: warn 1s ease-out;
-  // animation-iteration-count: infinite;
-  z-index: 1;
+.x6-node-container.heartbeat{
+  border: 3px solid #6a5cd4;
+  border-radius: 8px;
+  box-shadow: 0 0 0 5px rgb(135 59 244 / 20%);
 }
 .heartbeat{
+
 	animation-name: heartbeat;
 	animation-duration: 1s;	
 	animation-timing-function: ease;	
 	animation-iteration-count: infinite;
 	visibility: visible !important;	
 }
-
+@keyframes ant-line {
+  to {
+      stroke-dashoffset: -1000
+  }
+}
 @keyframes heartbeat {
 	0% {
 		transform: scale(1);	
@@ -508,31 +638,5 @@ export default class App extends Vue {
 	100% {
 		transform: scale(1);	
 	}						
-}
-@keyframes warn {
-	0% {
-    transform: scale(1, 1);
-    opacity: 1;
-  }
-	20% {
-    transform: scale(1.02, 1.02);
-    opacity: 0.95;
-  }
-	40% {
-    transform: scale(1.04, 1.04);
-    opacity: 0.9;
-  }
-	60% {
-    transform: scale(1.06, 1.06);
-    opacity: 0.85;
-  }
-	80% {
-    transform: scale(1.3, 1.3);
-    opacity: 0.8;
-  }
-	100% {
-    transform: scale(1.5, 1.5);
-    opacity: 0.75;
-  }
 }
 </style>
