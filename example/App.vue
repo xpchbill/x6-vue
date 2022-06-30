@@ -6,6 +6,9 @@
     <Graph 
       @ready="ready" 
       :resizing="false"
+      :interacting="{
+        nodeMovable: isEditMode ? true : false
+      }"
       :connecting="{
         snap: true, 
         allowBlank: false,
@@ -28,9 +31,11 @@
             <div class="x6-node-header__status">
               <a-tooltip color="#ffffff">
                 <template #title>
-                  <span class="x6-node-header__tooltip-text">执行成功</span>
+                  <span v-if="!isEditMode" class="x6-node-header__tooltip-text">执行成功</span>
+                  <span v-if="isEditMode" class="x6-node-header__tooltip-text">待执行</span>
                 </template>
-                <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+                <check-circle-filled v-if="!isEditMode" :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
+                <minus-circle-filled v-if="isEditMode" :style="{color: '#ddd', fontSize: '18px', marginRight: '6px'}" />
               </a-tooltip>
             </div>
             <span class="x6-node-header__label">
@@ -101,9 +106,11 @@
           <div class="x6-node-header__status">
             <a-tooltip color="#ffffff">
               <template #title>
-                <span class="x6-node-header__tooltip-text">执行失败</span>
+                <span v-if="!isEditMode" class="x6-node-header__tooltip-text">执行失败</span>
+                <span v-if="isEditMode" class="x6-node-header__tooltip-text">待执行</span>
               </template>
-              <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
+              <close-circle-filled v-if="!isEditMode" :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
+                <minus-circle-filled v-if="isEditMode" :style="{color: '#ddd', fontSize: '18px', marginRight: '6px'}" />
             </a-tooltip>
           </div>
           <span class="x6-node-header__label">
@@ -174,9 +181,11 @@
             <div class="x6-node-header__status">
               <a-tooltip color="#ffffff">
                 <template #title>
-                  <span class="x6-node-header__tooltip-text">正在执行</span>
+                  <span v-if="!isEditMode" class="x6-node-header__tooltip-text">正在执行</span>
+                  <span v-if="isEditMode" class="x6-node-header__tooltip-text">待执行</span>
                 </template>
-                <codepen-circle-filled :style="{color: '#1A86FC', fontSize: '18px', marginRight: '6px'}" />
+                <codepen-circle-filled v-if="!isEditMode" :style="{color: '#1A86FC', fontSize: '18px', marginRight: '6px'}" />
+                <minus-circle-filled v-if="isEditMode" :style="{color: '#ddd', fontSize: '18px', marginRight: '6px'}" />
               </a-tooltip>
             </div>
             <span class="x6-node-header__label">
@@ -185,7 +194,7 @@
                 主机参数查询
               </a-tooltip>
             </span>
-            <a-tooltip>
+            <a-tooltip v-if="isEditMode">
               <template #title>
                 <span v-if="isEditMode">删除节点</span>
                 <span v-if="!isEditMode">查看执行状态</span>
@@ -203,6 +212,40 @@
                 </template>
               </a-button>
             </a-tooltip>
+            <a-popover 
+              v-if="!isEditMode" 
+              :visible="true"
+            >
+              <template #title>
+                <div 
+                  :style="{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }"
+                >
+                  <div>当前执行状态</div>
+                  <a @click="hide">x</a>
+                </div>
+              </template>
+              <template #content>
+                <img 
+                  width="420"
+                  :style="{
+                    margin: '10px 0'
+                  }"
+                  src="/picture01.png" 
+                />
+              </template>
+              <div 
+                :style="{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '42px',
+                }"
+              >
+                <pie-chart-filled />
+              </div>
+            </a-popover>
           </div>
           <div class="x6-node-body"></div>
         </div>
@@ -360,8 +403,8 @@
       <Snapline />
       <Clipboard @copy="copy" @paste="paste" />
       <Keyboard />
-      <MouseWheel />
-      <MiniMap />
+      <!-- <MouseWheel /> -->
+      <!-- <MiniMap /> -->
       <Node v-for="node in addedNodes" :key="node.id" v-bind="node" />
       <ContextMenu bindType="node">
         <template #default="scope">
