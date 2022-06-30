@@ -184,7 +184,7 @@
                   <span v-if="!isEditMode" class="x6-node-header__tooltip-text">正在执行</span>
                   <span v-if="isEditMode" class="x6-node-header__tooltip-text">待执行</span>
                 </template>
-                <codepen-circle-filled v-if="!isEditMode" :style="{color: '#1A86FC', fontSize: '18px', marginRight: '6px'}" />
+                <codepen-circle-filled class="roateicon" v-if="!isEditMode" :style="{color: '#1A86FC', fontSize: '18px', marginRight: '6px'}" />
                 <minus-circle-filled v-if="isEditMode" :style="{color: '#ddd', fontSize: '18px', marginRight: '6px'}" />
               </a-tooltip>
             </div>
@@ -743,8 +743,14 @@ export default class App extends Vue {
   box-shadow: 0 0 0 5px rgb(135 59 244 / 20%);
 }
 .heartbeat{
-
 	animation-name: heartbeat;
+	animation-duration: 1s;	
+	animation-timing-function: ease;	
+	animation-iteration-count: infinite;
+	visibility: visible !important;	
+}
+.roateicon{
+	animation-name: roateicon;
 	animation-duration: 1s;	
 	animation-timing-function: ease;	
 	animation-iteration-count: infinite;
@@ -767,6 +773,26 @@ export default class App extends Vue {
 	}
 	100% {
 		transform: scale(1);	
+	}						
+}
+@keyframes roateicon {
+	0% {
+    transform: rotate(0deg);
+	}
+	// 20% {
+  //   transform: rotate(72deg);
+	// }
+	// 40% {
+  //   transform: rotate(144deg);
+	// }
+	// 60% {
+  //   transform: rotate(216deg);
+	// }
+	// 80% {
+  //   transform: rotate(288deg);
+	// }
+	100% {
+    transform: rotate(360deg);
 	}						
 }
 </style>
