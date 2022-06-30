@@ -243,7 +243,16 @@
                   height: '42px',
                 }"
               >
-                <pie-chart-filled />
+                <a-button 
+                  type="ghost" 
+                  shape="circle"
+                  size="small"
+                  :style="{color: '#fff'}" 
+                >
+                  <template #icon>
+                    <pie-chart-filled v-if="!isEditMode" />
+                  </template>
+                </a-button>
               </div>
             </a-popover>
           </div>
