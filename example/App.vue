@@ -28,19 +28,22 @@
             <div class="x6-node-header__status">
               <a-tooltip color="#ffffff">
                 <template #title>
-                  <span class="x6-node-header__tooltip-text">Sucess</span>
+                  <span class="x6-node-header__tooltip-text">执行成功</span>
                 </template>
                 <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
               </a-tooltip>
             </div>
             <span class="x6-node-header__label">
               <a-tooltip>
-                <template #title>xxxxxxxx01</template>
-                xxxxxxxx01
+                <template #title>查询主机线程数</template>
+                查询主机线程数
               </a-tooltip>
             </span>
             <a-tooltip>
-              <template #title>Delete node</template>
+              <template #title>
+                <span v-if="isEditMode">删除节点</span>
+                <span v-if="!isEditMode">查看执行状态</span>
+              </template>
               <a-button 
                 type="ghost" 
                 shape="circle"
@@ -48,11 +51,12 @@
                 :style="{color: '#fff'}" 
                 @click="handleCustomNodeClick(scope, $event)"
               >
-                <template v-if="isEditMode" #icon><delete-filled /></template>
+                <template #icon>
+                  <delete-filled v-if="isEditMode" />
+                  <pie-chart-filled v-if="!isEditMode" />
+                </template>
               </a-button>
             </a-tooltip>
-          </div>
-          <div class="x6-node-body">
           </div>
         </div>
         <template #port>
@@ -94,17 +98,38 @@
       </VueShape>
       <VueShape primer="rect" id="2" :x="500" :y="100" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
         <div class="x6-node-header">
-          <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
-          <span class="x6-node-header__label">
-            <a-popover title="Title" placement="topLeft">
-              <template #content>
-                <p>Content</p>
-                <p>Content</p>
+          <div class="x6-node-header__status">
+            <a-tooltip color="#ffffff">
+              <template #title>
+                <span class="x6-node-header__tooltip-text">执行失败</span>
               </template>
-              xxxxxxxx02
-            </a-popover>
+              <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
+            </a-tooltip>
+          </div>
+          <span class="x6-node-header__label">
+            <a-tooltip>
+              <template #title>主机版本查询</template>
+              主机版本查询
+            </a-tooltip>
           </span>
-          <plus-square-filled :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
+          <a-tooltip>
+            <template #title>
+              <span v-if="isEditMode">删除节点</span>
+              <span v-if="!isEditMode">查看执行状态</span>
+            </template>
+            <a-button 
+              type="ghost" 
+              shape="circle"
+              size="small"
+              :style="{color: '#fff'}" 
+              @click="handleCustomNodeClick(scope, $event)"
+            >
+              <template #icon>
+                <delete-filled v-if="isEditMode" />
+                <pie-chart-filled v-if="!isEditMode" />
+              </template>
+            </a-button>
+          </a-tooltip>
         </div>
         <template #port>
           <PortGroup 
@@ -144,25 +169,43 @@
         </template>
       </VueShape>
       <VueShape primer="rect" id="3" :x="500" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
-        <a-popover title="Title" placement="top" arrow-point-at-center>
-          <template #content>
-            <p>Content</p>
-            <p>Content</p>
-          </template>
-          <div :class="isEditMode ? 'x6-node-container' : 'x6-node-container heartbeat'">
-            <div class="x6-node-header">
-              <div class="x6-node-header__status">
-                <check-circle-filled :style="{color: '#87D069', fontSize: '18px', marginRight: '6px'}" />
-              </div>
-              <span class="x6-node-header__label">
-                  xxxxxxxx01
-              </span>
-              <plus-square-filled @click="handleCustomNodeClick(scope, $event)" />
+        <div :class="isEditMode ? 'x6-node-container' : 'x6-node-container heartbeat'">
+          <div class="x6-node-header">
+            <div class="x6-node-header__status">
+              <a-tooltip color="#ffffff">
+                <template #title>
+                  <span class="x6-node-header__tooltip-text">正在执行</span>
+                </template>
+                <codepen-circle-filled :style="{color: '#1A86FC', fontSize: '18px', marginRight: '6px'}" />
+              </a-tooltip>
             </div>
-            <div class="x6-node-body">
-            </div>
+            <span class="x6-node-header__label">
+              <a-tooltip>
+                <template #title>主机参数查询</template>
+                主机参数查询
+              </a-tooltip>
+            </span>
+            <a-tooltip>
+              <template #title>
+                <span v-if="isEditMode">删除节点</span>
+                <span v-if="!isEditMode">查看执行状态</span>
+              </template>
+              <a-button 
+                type="ghost" 
+                shape="circle"
+                size="small"
+                :style="{color: '#fff'}" 
+                @click="handleCustomNodeClick(scope, $event)"
+              >
+                <template #icon>
+                  <delete-filled v-if="isEditMode" />
+                  <pie-chart-filled v-if="!isEditMode" />
+                </template>
+              </a-button>
+            </a-tooltip>
           </div>
-        </a-popover>
+          <div class="x6-node-body"></div>
+        </div>
         <template #port>
           <PortGroup 
             name="in" 
@@ -202,17 +245,38 @@
       </VueShape>
       <VueShape primer="rect" id="4" :x="900" :y="500" :width="220" :attrs="{rect: {fill: '#ffffff', stroke: '#cccccc', rx: '5', ry: '5'}}" @added="added" @cell:change:zIndex="changed">
         <div class="x6-node-header">
-          <close-circle-filled :style="{color: '#F62728', fontSize: '18px', marginRight: '6px'}" />
-          <span class="x6-node-header__label">
-            <a-popover title="Title" placement="topLeft">
-              <template #content>
-                <p>Content</p>
-                <p>Content</p>
+          <div class="x6-node-header__status">
+            <a-tooltip color="#ffffff">
+              <template #title>
+                <span class="x6-node-header__tooltip-text">待执行</span>
               </template>
-              xxxxxxxx04
-            </a-popover>
+              <minus-circle-filled :style="{color: '#ddd', fontSize: '18px', marginRight: '6px'}" />
+            </a-tooltip>
+          </div>
+          <span class="x6-node-header__label">
+              <a-tooltip>
+                <template #title>主机线程查询</template>
+                主机线程查询
+              </a-tooltip>
           </span>
-          <plus-square-filled :style="{color: '#ffffff', fontSize: '18px', marginLeft: '6px'}" @click="handleCustomNodeClick(scope, $event)" />
+          <a-tooltip>
+            <template #title>
+              <span v-if="isEditMode">删除节点</span>
+              <span v-if="!isEditMode">查看执行状态</span>
+            </template>
+            <a-button 
+              type="ghost" 
+              shape="circle"
+              size="small"
+              :style="{color: '#fff'}" 
+              @click="handleCustomNodeClick(scope, $event)"
+            >
+              <template #icon>
+                <delete-filled v-if="isEditMode" />
+                <pie-chart-filled v-if="!isEditMode" />
+              </template>
+            </a-button>
+          </a-tooltip>
         </div>
         <template #port>
           <PortGroup 
@@ -335,6 +399,9 @@ import {
   CloseCircleFilled,
   PlusSquareFilled,
   DeleteFilled,
+  PieChartFilled,
+  MinusCircleFilled,
+  CodepenCircleFilled,
 } from '@ant-design/icons-vue'
 import { Options, Vue } from 'vue-class-component'
 import { Vector } from '@antv/x6';
@@ -392,6 +459,9 @@ const CustomNode = defineComponent({
     CloseCircleFilled,
     PlusSquareFilled,
     DeleteFilled,
+    PieChartFilled,
+    MinusCircleFilled,
+    CodepenCircleFilled,
   },
 })
 export default class App extends Vue {
@@ -561,6 +631,11 @@ export default class App extends Vue {
   .x6-node-body {
     padding: 10px;
     background: #ffffff;
+    border-color: #000;
+    border-width: 1px;
+    border-radius: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
   .x6-node-header {
     display: flex;
@@ -586,6 +661,9 @@ export default class App extends Vue {
       z-index: 3;
       border-radius: 100%;
       background: #2C3044;
+    }
+    &__status .anticon-codepen-circle {
+      background: #fff;
     }
     &__label {
       height: 100%;
